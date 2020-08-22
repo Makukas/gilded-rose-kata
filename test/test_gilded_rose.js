@@ -9,9 +9,9 @@ describe("Gilded Rose", function() {
   });
 
   it("should update foo quality", function() {
-    const gildedRose = new Shop([ new Item("foo", 0, 10) ]);
+    const gildedRose = new Shop([ new Item("foo", 2, 10) ]);
     const items = gildedRose.updateQuality();
-    expect(items[0].quality).to.equal(8);
+    expect(items[0].quality).to.equal(9);
   });
 
   it("should update foo sellIn", function() {
@@ -69,6 +69,13 @@ describe("Gilded Rose", function() {
     expect(items[0].sellIn).to.equal(4);
   });
 
+  it("should increase Aged Brie quality by 2 if sellIn <= 0", function() {
+    const gildedRose = new Shop([ new Item("Aged Brie", 0, 10) ]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).to.equal(12);
+    expect(items[0].sellIn).to.equal(-1);
+  });
+
   it("should not increase quality above 50", function() {
     const gildedRose = new Shop([ new Item("Aged Brie", 5, 50) ]);
     const items = gildedRose.updateQuality();
@@ -103,11 +110,25 @@ describe("Gilded Rose", function() {
     expect(items[0].sellIn).to.equal(10);
   });
 
+  it("should decrease Backstage passes quality to 0 if sellIn <= 0", function() {
+    const gildedRose = new Shop([ new Item("Backstage passes to a TAFKAL80ETC concert", 0, 10) ]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).to.equal(0);
+    expect(items[0].sellIn).to.equal(-1);
+  });
+
   it("should decrease Conjured items quality twice as fast (by 2)", function() {
     const gildedRose = new Shop([ new Item("Conjured", 10, 10) ]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).to.equal(8);
     expect(items[0].sellIn).to.equal(9);
+  });
+
+  it("should decrease Conjured items quality by 4 if saleIn <= 0 ", function() {
+    const gildedRose = new Shop([ new Item("Conjured", 0, 10) ]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).to.equal(6);
+    expect(items[0].sellIn).to.equal(-1);
   });
 
 });
