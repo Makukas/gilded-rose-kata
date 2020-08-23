@@ -58,7 +58,6 @@ function checkQualityRange(quality) {
 }
 
 function adjustQuality(quality, sellIn, adjustBy) {
-  // adjusts quality if sellIn is > 0
   if (sellIn > 0) {
     quality += adjustBy;
   } else {
