@@ -4,7 +4,12 @@ var { Shop, Item } = require('./gilded_rose.js');
 
 processItems();
 
-async function processItems(inputFile = 'text.txt') {
+async function processItems(inputFile = 'generatedInput') {
+    let writeStream_Brie = fs.createWriteStream('Brie', { flags: 'a' });
+    let writeStream_Backstage = fs.createWriteStream('Backstage', { flags: 'a' });
+    let writeStream_Sulfuras = fs.createWriteStream('Sulfuras', { flags: 'a' });
+    let writeStream_Conjured = fs.createWriteStream('Conjured', { flags: 'a' });
+    let writeStream_foo = fs.createWriteStream('foo', { flags: 'a' });
     const readInterface = readline.createInterface({
         input: fs.createReadStream(inputFile)
     });
@@ -16,35 +21,31 @@ async function processItems(inputFile = 'text.txt') {
             const items = gildedRose.updateQuality();
             items.forEach(item => {
                 let textToWrite = item.name + '#' + item.sellIn + '#' + item.quality + '\n';
-                var file = '';
                 switch (item.name) {
                     case 'Backstage passes to a TAFKAL80ETC concert':
-                        file = 'Backstage.txt';
+                        writeStream_Backstage.write(textToWrite);
                         break;
                     case 'Sulfuras, Hand of Ragnaros':
-                        file = 'Sulfuras.txt';
+                        writeStream_Sulfuras.write(textToWrite);
                         break;
                     case 'Aged Brie':
-                        file = 'Brie.txt';
+                        writeStream_Brie.write(textToWrite);
                         break;
                     case 'Conjured':
-                        file = 'Conjured.txt';
+                        writeStream_Conjured.write(textToWrite);
                         break;
                     case 'foo':
-                        file = 'foo.txt';
+                        writeStream_foo.write(textToWrite);
                         break;
                 }
-                streamWrite(file, textToWrite);
             })
         })
         .on('close', function (err) {
             console.log('Streams have been Closed');
+            writeStream_Backstage.end();
+            writeStream_Sulfuras.end();
+            writeStream_Brie.end();
+            writeStream_Conjured.end();
+            writeStream_foo.end();
         });
-}
-
-function streamWrite(file, textToWrite) {
-    let writeStream = fs.createWriteStream(file, { flags: 'a' });
-    writeStream.write(textToWrite);
-    writeStream.end();
-    return;
 }
