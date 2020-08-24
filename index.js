@@ -20,7 +20,7 @@ async function processItems(inputFile = 'generatedInput') {
             const gildedRose = new Shop([new Item(splittedItemInfo[0], parseInt(splittedItemInfo[1]), parseInt(splittedItemInfo[2]))]);
             const items = gildedRose.updateQuality();
             items.forEach(item => {
-                let textToWrite = item.name + '#' + item.sellIn + '#' + item.quality + '\n';
+                let textToWrite = item.name + '#' + item.quality + '#' + item.sellIn + '\n';
                 switch (item.name) {
                     case 'Backstage passes to a TAFKAL80ETC concert':
                         writeStream_Backstage.write(textToWrite);
