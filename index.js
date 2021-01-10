@@ -1,6 +1,6 @@
-var fs = require('fs');
+const fs = require('fs');
 const readline = require('readline');
-var { Shop, Item } = require('./gilded_rose.js');
+let { Shop, Item } = require('./gilded_rose.js');
 
 processItems();
 
