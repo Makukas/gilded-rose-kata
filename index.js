@@ -65,7 +65,13 @@ function write_drain_handling(stream_to_use, data){
 
 function write(stream_to_use, data, cb) {
     if (!stream_to_use.write(data)) {
+        // just doing stream_to_use.emit("drain"); is not great 
+        // because we are not waiting for drain to finish
+
+        //TODO: look into this more
+        // seems to use way less memory and no listener memory leaks
         stream_to_use.emit("drain");
+        stream_to_use.on("drain", cb);
     }
     process.nextTick(cb);
   }
