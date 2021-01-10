@@ -15,30 +15,30 @@ async function processItems(inputFile = 'generatedInput') {
     });
 
     readInterface
-        .on('line', function (itemInfo) {
+        .on('line', async function (itemInfo) {
             let splittedItemInfo = itemInfo.split("#")
             const gildedRose = new Shop([new Item(splittedItemInfo[0], parseInt(splittedItemInfo[1]), parseInt(splittedItemInfo[2]))]);
             const items = gildedRose.updateQuality();
-            items.forEach(item => {
+            for (let item of items) {
                 let textToWrite = item.name + '#' + item.quality + '#' + item.sellIn + '\n';
                 switch (item.name) {
                     case 'Backstage passes to a TAFKAL80ETC concert':
-                        writeStream_Backstage.write(textToWrite);
+                        await stream_write(writeStream_Backstage, textToWrite);
                         break;
                     case 'Sulfuras, Hand of Ragnaros':
-                        writeStream_Sulfuras.write(textToWrite);
+                        await stream_write(writeStream_Sulfuras, textToWrite);
                         break;
                     case 'Aged Brie':
-                        writeStream_Brie.write(textToWrite);
+                        await stream_write(writeStream_Brie, textToWrite);
                         break;
                     case 'Conjured':
-                        writeStream_Conjured.write(textToWrite);
+                        await stream_write(writeStream_Conjured, textToWrite);
                         break;
                     case 'foo':
-                        writeStream_foo.write(textToWrite);
+                        await stream_write(writeStream_foo, textToWrite);
                         break;
                 }
-            })
+            }
         })
         .on('close', function (err) {
             console.log('Streams have been Closed');
@@ -49,3 +49,23 @@ async function processItems(inputFile = 'generatedInput') {
             writeStream_foo.end();
         });
 }
+
+async function stream_write(stream_to_use, data){
+    await write_drain_handling(stream_to_use, data);
+    return;
+}
+
+function write_drain_handling(stream_to_use, data){
+    return new Promise (resolve => {
+        write(stream_to_use, data, () => {
+            resolve("finished writing");
+        });
+    })
+}
+
+function write(stream_to_use, data, cb) {
+    if (!stream_to_use.write(data)) {
+        stream_to_use.emit("drain");
+    }
+    process.nextTick(cb);
+  }
