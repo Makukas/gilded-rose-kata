@@ -12,38 +12,60 @@ class Shop {
   }
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-
-      switch (this.items[i].name) {
+      let item = this.items[i];
+      switch (item.name) {
         case 'Aged Brie':
-          this.items[i].quality = adjustQuality(this.items[i].quality, this.items[i].sellIn, 1);
-          this.items[i].sellIn--;
+          item = handle_aged_brie(item);
           break;
         case 'Backstage passes to a TAFKAL80ETC concert':
-          if (this.items[i].sellIn === 0) {
-            this.items[i].quality = 0;
-          } else if (this.items[i].sellIn <= 5) {
-            this.items[i].quality += 3;
-          } else if (this.items[i].sellIn <= 10) {
-            this.items[i].quality += 2;
-          } else {
-            this.items[i].quality += 1;
-          }
-          this.items[i].quality = checkQualityRange(this.items[i].quality)
-          this.items[i].sellIn--;
+          item = handle_backstage_passes(item)
           break;
         case 'Conjured':
-          this.items[i].quality = adjustQuality(this.items[i].quality, this.items[i].sellIn, -2);
-          this.items[i].sellIn--;
+          item = handle_conjured(item);
           break;
         case 'foo':
-          this.items[i].quality = adjustQuality(this.items[i].quality, this.items[i].sellIn, -1);
-          this.items[i].sellIn--;
+          item = handle_foo(item);
           break;
       }
     }
 
     return this.items;
   }
+}
+
+function handle_general_item(item, adjust_quality_by){
+  item.quality = adjustQuality(item.quality, item.sellIn, adjust_quality_by);
+  item.sellIn--;
+  return item;
+}
+
+// handling for aged brie, conjured and foo items is nearly identical but they
+// are in different functions in case their handling changes in the future
+function handle_aged_brie(item){
+  return handle_general_item(item, 1);
+}
+
+function handle_conjured(item){
+  return handle_general_item(item, -2);
+}
+
+function handle_foo(item){
+  return handle_general_item(item, -1);
+}
+
+function handle_backstage_passes(item){
+  if (item.sellIn === 0) {
+    item.quality = 0;
+  } else if (item.sellIn <= 5) {
+    item.quality += 3;
+  } else if (item.sellIn <= 10) {
+    item.quality += 2;
+  } else {
+    item.quality += 1;
+  }
+  item.quality = checkQualityRange(item.quality)
+  item.sellIn--;
+  return item
 }
 
 function checkQualityRange(quality) {
