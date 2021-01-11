@@ -1,2 +1,9 @@
 node_modules/
 package-lock.json
+.nyc_output
+Backstage
+Brie
+Conjured
+foo
+Sulfuras
+generatedInput
