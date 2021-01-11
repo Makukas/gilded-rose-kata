@@ -4,7 +4,7 @@
   "description": "refactoring gilded rose kata in javascript/node.js",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha"
+    "test": "nyc mocha test/**/*.js"
   },
   "repository": {
     "type": "git",
