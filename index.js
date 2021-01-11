@@ -70,8 +70,8 @@ function write(stream_to_use, data, cb) {
 
         //TODO: look into this more
         // seems to use way less memory and no listener memory leaks
+        stream_to_use.once("drain", cb);
         stream_to_use.emit("drain");
-        stream_to_use.on("drain", cb);
     }
     process.nextTick(cb);
   }
