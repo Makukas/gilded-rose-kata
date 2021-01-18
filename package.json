@@ -18,6 +18,8 @@
   "homepage": "https://github.com/Makukas/gilded-rose-kata#readme",
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^7.18.0",
+    "eslint-config-google": "^0.14.0",
     "mocha": "^8.1.1",
     "nyc": "^15.1.0"
   }
